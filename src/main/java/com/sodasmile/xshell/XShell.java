@@ -10,7 +10,9 @@ import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
 import javax.management.ObjectName;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.PrintStream;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,15 +30,21 @@ public class XShell {
                     + "  /  /_ \\  \\'   | /  / /  / /  /__  /  /__ /  /__\n"
                     + " /____/  \\_____/ /__/ /__/ /_____/ /_____//_____/";
 
-    private static RMIAdaptor server;
+    private RMIAdaptor server;
 
     private String objectName = "larm:name=Tennet,type=Management";
     private LarmCompletor larmCompletor;
+    private Hashtable<String, String> jndiEnvironment;
+    private static final String DEFAULT_PORT = ":1099";
 
     private XShell() throws Exception {
-        InitialContext ic = new InitialContext();
-        server = (RMIAdaptor) ic.lookup("jmx/invoker/RMIAdaptor");
+        jndiEnvironment = new Hashtable<String, String>();
+        jndiEnvironment.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+        jndiEnvironment.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
+        jndiEnvironment.put("java.naming.provider.url", "localhost" + DEFAULT_PORT);
 
+//        InitialContext ic = new InitialContext(jndiEnvironment);
+//        server = (RMIAdaptor) ic.lookup("jmx/invoker/RMIAdaptor");
         larmCompletor = new LarmCompletor();
     }
 
@@ -48,6 +56,28 @@ public class XShell {
         } else if (kommando.equals("cd tennet")) {
             objectName = "larm:name=Tennet,type=Management";
             printinfo();
+            return;
+        } else if (kommando.startsWith("connect")) {
+            String[] s = kommando.split("\\s+");
+            // s[0] == connect
+            // s[1] == ex: localhost[:1099]
+            if (s.length > 1) { // host specified
+                if (s[1].indexOf(":") != -1) {
+                    jndiEnvironment.put("java.naming.provider.url", s[1]);
+                } else {
+                    jndiEnvironment.put("java.naming.provider.url", s[1] + ":" + DEFAULT_PORT);
+                }
+            } else {
+                // not specified host
+                jndiEnvironment.put("java.naming.provider.url", "localhost" + DEFAULT_PORT);
+            }
+
+            try {
+                InitialContext ic = new InitialContext(jndiEnvironment);
+                server = (RMIAdaptor) ic.lookup("jmx/invoker/RMIAdaptor");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         } else if (kommando.equals("demo")) {
             kommando = "demodag";
@@ -179,6 +209,7 @@ public class XShell {
             options.add("cd norned");
             options.add("cd tennet");
             options.add("avslutt");
+            options.add("connect");
             options.add("help");
 
         }
