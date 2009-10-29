@@ -8,11 +8,15 @@
     <artifactId>XShell</artifactId>
     <version>1.0</version>
 
+    <properties>
+        <jboss.version>4.2.2.GA</jboss.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>jboss</groupId>
             <artifactId>jbossall-client</artifactId>
-            <version>4.2.2.GA</version>
+            <version>${jboss.version}</version>
         </dependency>
         <dependency>
             <groupId>jline</groupId>
@@ -20,4 +24,34 @@
             <version>0.9.94</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <defaultGoal>exec:java</defaultGoal>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.sodasmile.xshell.XShell</mainClass>
+                    <classpathScope>runtime</classpathScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
