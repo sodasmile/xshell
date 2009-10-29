@@ -19,9 +19,9 @@
             <artifactId>jline</artifactId>
             <version>0.9.94</version>
         </dependency>
-    </dependencies>
+    </dependencies>      
 
-    <build>
+    <build >
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
