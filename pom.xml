@@ -23,9 +23,9 @@
             <artifactId>jline</artifactId>
             <version>0.9.94</version>
         </dependency>
-    </dependencies>
+    </dependencies>      
 
-    <build>
+    <build >
         <defaultGoal>exec:java</defaultGoal>
         <plugins>
             <plugin>
