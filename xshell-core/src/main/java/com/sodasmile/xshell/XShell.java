@@ -26,12 +26,11 @@ public class XShell {
                     + "  /  /_ \\  \\'   | /  / /  / /  /__  /  /__ /  /__\n"
                     + " /____/  \\_____/ /__/ /__/ /_____/ /_____//_____/";
 
-    //private RMIAdaptor server;
-    private MBeanServerConnection server;
+    //private RMIAdaptor connection;
+    private MBeanServerConnection connection;
 
     private String objectName = "larm:name=Tennet,type=Management";
     private LarmCompletor larmCompletor;
-    private Hashtable<String, String> jndiEnvironment;
     private static final String DEFAULT_PORT = ":1099";
 
     private final JmxConnectionProvider provider;
@@ -39,14 +38,7 @@ public class XShell {
     public XShell(final JmxConnectionProvider provider) throws Exception {
         this.provider = provider;
 
-        jndiEnvironment = new Hashtable<String, String>();
-        jndiEnvironment.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
-        jndiEnvironment.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
-        jndiEnvironment.put("java.naming.provider.url", "localhost" + DEFAULT_PORT);
-
-//        InitialContext ic = new InitialContext(jndiEnvironment);
-//        server = (RMIAdaptor) ic.lookup("jmx/invoker/RMIAdaptor");
-        larmCompletor = new LarmCompletor();
+        this.larmCompletor = new LarmCompletor();
     }
 
     private void sendKommando(String kommando) throws Exception {
@@ -59,7 +51,16 @@ public class XShell {
             printinfo();
             return;
         } else if (kommando.startsWith("connect")) {
-            String[] s = kommando.split("\\s+");
+
+            this.connection = provider.connect();
+
+            StringBuffer buf = new StringBuffer("Connected - the following domains are available:\n");
+            for (String domain : connection.getDomains()) {
+                buf.append(" * ").append(domain).append('\n');
+            }
+
+            System.out.println(buf);
+            /*String[] s = kommando.split("\\s+");
             // s[0] == connect
             // s[1] == ex: localhost[:1099]
             if (s.length > 1) { // host specified
@@ -75,11 +76,12 @@ public class XShell {
 
             try {
                 InitialContext ic = new InitialContext(jndiEnvironment);
-                server = (MBeanServer) ic.lookup("jmx/invoker/RMIAdaptor");
+                connection = (MBeanServer) ic.lookup("jmx/invoker/RMIAdaptor");
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
             return;
+            
         } else if (kommando.equals("demo")) {
             kommando = "demodag";
         } else if (kommando.equals("spk")) {
@@ -104,13 +106,13 @@ public class XShell {
                 }
                 String operasjon = kommando.replaceAll("\\s+.*$", "");
 
-//                MBeanInfo mBeanInfo = server.getMBeanInfo(object);
+//                MBeanInfo mBeanInfo = connection.getMBeanInfo(object);
 //                MBeanOperationInfo[] infos = mBeanInfo.getOperations();
 //
 
-                server.invoke(object, operasjon, new Object[]{parameterbit}, new String[]{"java.lang.String"});
+                connection.invoke(object, operasjon, new Object[]{parameterbit}, new String[]{"java.lang.String"});
             } else {
-                server.invoke(object, kommando, null, null);
+                connection.invoke(object, kommando, null, null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +122,7 @@ public class XShell {
     private void printinfo() {
         try {
             Set<String> operations = new TreeSet<String>();
-            MBeanInfo info = server.getMBeanInfo(new ObjectName(objectName));
+            MBeanInfo info = connection.getMBeanInfo(new ObjectName(objectName));
             final MBeanOperationInfo[] opInfo = info.getOperations();
             for (MBeanOperationInfo op : opInfo) {
                 String returnType = op.getReturnType();
