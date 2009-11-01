@@ -4,29 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sodasmile.XShell</groupId>
-    <artifactId>XShell</artifactId>
+    <groupId>com.sodasmile.xshell</groupId>
+    <artifactId>xshell</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-    <properties>
-        <jboss.version>4.2.2.GA</jboss.version>
-    </properties>
+    <name>XShell</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>jboss</groupId>
-            <artifactId>jbossall-client</artifactId>
-            <version>${jboss.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>0.9.94</version>
-        </dependency>
-    </dependencies>      
+    <scm>
+        <connection>scm:hg:https://xshell.googlecode.com/hg</connection>
+        <developerConnection>scm:hg:https://xshell.googlecode.com/hg</developerConnection>
+    </scm>
 
-    <build >
-        <defaultGoal>exec:java</defaultGoal>
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/xshell/issues/list</url>
+    </issueManagement>
+
+    <modules>
+        <module>xshell-core</module>
+        <module>xshell-maven-plugin</module>
+        <module>xshell-example-projects</module>
+    </modules>
+
+    <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -34,48 +35,6 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>com.sodasmile.xshell.XShell</mainClass>
-                    <classpathScope>runtime</classpathScope>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.sodasmile.xshell.XShell</mainClass>
-                                </transformer>
-                            </transformers>
-
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>standalone</shadedClassifierName>
-
-                        </configuration>
-
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

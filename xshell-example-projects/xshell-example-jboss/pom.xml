@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sodasmile.xshell</groupId>
+        <artifactId>xshell-example-projects</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>xshell-example-jboss</artifactId>
+    <name>XShell :: Example :: JBoss Application Server</name>
+
+    <repositories>
+        <repository>
+            <id>jboss.org</id>
+            <url>http://repository.jboss.com/maven2/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.client</groupId>
+            <artifactId>jbossall-client</artifactId>
+            <version>4.2.2.GA</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${pom.groupId}</groupId>
+                <artifactId>xshell-maven-plugin</artifactId>
+                <version>${pom.version}</version>
+                <configuration>
+                    <jndi>
+                        <java.naming.factory.initial>org.jnp.interfaces.NamingContextFactory</java.naming.factory.initial>
+                        <java.naming.factory.url.pkgs>org.jboss.naming:org.jnp.interfaces</java.naming.factory.url.pkgs>
+                        <java.naming.provider.url>localhost:1099</java.naming.provider.url>
+                    </jndi>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

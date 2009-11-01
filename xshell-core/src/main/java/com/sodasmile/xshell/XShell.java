@@ -1,16 +1,13 @@
 package com.sodasmile.xshell;
 
+import com.sodasmile.xshell.provider.JmxConnectionProvider;
 import jline.ANSIBuffer;
 import jline.Completor;
 import jline.ConsoleReader;
-import org.jboss.jmx.adaptor.rmi.RMIAdaptor;
+//import org.jboss.jmx.adaptor.rmi.RMIAdaptor;
 
-import javax.management.MBeanInfo;
-import javax.management.MBeanOperationInfo;
-import javax.management.MBeanParameterInfo;
-import javax.management.ObjectName;
+import javax.management.*;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.io.PrintStream;
 import java.util.Hashtable;
 import java.util.List;
@@ -30,14 +27,18 @@ public class XShell {
                     + "  /  /_ \\  \\'   | /  / /  / /  /__  /  /__ /  /__\n"
                     + " /____/  \\_____/ /__/ /__/ /_____/ /_____//_____/";
 
-    private RMIAdaptor server;
+    //private RMIAdaptor server;
+    private MBeanServerConnection server;
 
     private String objectName = "larm:name=Tennet,type=Management";
     private LarmCompletor larmCompletor;
     private Hashtable<String, String> jndiEnvironment;
     private static final String DEFAULT_PORT = ":1099";
+    
+    private JmxConnectionProvider provider;
 
-    private XShell() throws Exception {
+    private XShell(final JmxConnectionProvider provider) throws Exception {
+        this.provider = provider;
         jndiEnvironment = new Hashtable<String, String>();
         jndiEnvironment.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
         jndiEnvironment.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
@@ -74,7 +75,7 @@ public class XShell {
 
             try {
                 InitialContext ic = new InitialContext(jndiEnvironment);
-                server = (RMIAdaptor) ic.lookup("jmx/invoker/RMIAdaptor");
+                server = (MBeanServer) ic.lookup("jmx/invoker/RMIAdaptor");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -152,7 +153,7 @@ public class XShell {
         }
     }
 
-    private void kjør() throws Exception {
+    private void execute() throws Exception {
         String shellPrompt = "lshell> ";
         ConsoleReader reader = new ConsoleReader();
 
@@ -229,7 +230,7 @@ public class XShell {
 
     public static void main(final String[] args) throws Exception {
 
-        XShell me = new XShell();
-        me.kjør();
+        XShell me = new XShell(null);
+        me.execute();
     }
 }
