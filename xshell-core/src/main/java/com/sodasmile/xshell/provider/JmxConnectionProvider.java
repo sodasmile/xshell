@@ -7,6 +7,7 @@ import javax.management.MBeanServerConnection;
  */
 public interface JmxConnectionProvider {
 
+
     /**
      * Connects to the {@link javax.management.MBeanServer}.
      *

@@ -4,7 +4,6 @@ import com.sodasmile.xshell.provider.JmxConnectionProvider;
 import jline.ANSIBuffer;
 import jline.Completor;
 import jline.ConsoleReader;
-//import org.jboss.jmx.adaptor.rmi.RMIAdaptor;
 
 import javax.management.*;
 import javax.naming.InitialContext;
@@ -34,11 +33,12 @@ public class XShell {
     private LarmCompletor larmCompletor;
     private Hashtable<String, String> jndiEnvironment;
     private static final String DEFAULT_PORT = ":1099";
-    
-    private JmxConnectionProvider provider;
 
-    private XShell(final JmxConnectionProvider provider) throws Exception {
+    private final JmxConnectionProvider provider;
+
+    public XShell(final JmxConnectionProvider provider) throws Exception {
         this.provider = provider;
+
         jndiEnvironment = new Hashtable<String, String>();
         jndiEnvironment.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
         jndiEnvironment.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
@@ -153,13 +153,13 @@ public class XShell {
         }
     }
 
-    private void execute() throws Exception {
+    public void execute() throws Exception {
         String shellPrompt = "lshell> ";
         ConsoleReader reader = new ConsoleReader();
 
         if (reader.getTerminal().isANSISupported()) {
             ANSIBuffer ansi = new ANSIBuffer();
-            shellPrompt = ansi.yellow("lshell> ").toString();
+            shellPrompt = ansi.yellow("xshell> ").toString();
         }
 
         String linje;

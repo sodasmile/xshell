@@ -36,11 +36,13 @@
                 <artifactId>xshell-maven-plugin</artifactId>
                 <version>${pom.version}</version>
                 <configuration>
-                    <jndi>
+                    <provider>
+                        <class>com.sodasmile.xshell.provider.JndiJmxConnectionProvider</class>
+                        <name>jmx/invoker/RMIAdaptor</name>
                         <java.naming.factory.initial>org.jnp.interfaces.NamingContextFactory</java.naming.factory.initial>
                         <java.naming.factory.url.pkgs>org.jboss.naming:org.jnp.interfaces</java.naming.factory.url.pkgs>
                         <java.naming.provider.url>localhost:1099</java.naming.provider.url>
-                    </jndi>
+                    </provider>
                 </configuration>
             </plugin>
         </plugins>
