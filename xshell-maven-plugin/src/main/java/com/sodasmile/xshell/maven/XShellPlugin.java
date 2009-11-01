@@ -93,15 +93,4 @@ public class XShellPlugin extends AbstractMojo {
 
     }
 
-    private void pikk(String jalla, ClassLoader loader1) {
-        try {
-            Class<?> clazz = loader1.loadClass("org.jboss.jmx.adaptor.rmi.RMIAdaptor");
-            System.err.println("\n##\n##\n## " + jalla + " SHELL IS RUNNING :: " + clazz + "\n##\n##\n##");
-        } catch (ClassNotFoundException e) {
-            System.err.println("ERR: " + e.getMessage());
-        }
-    }
-
-    
-
 }
