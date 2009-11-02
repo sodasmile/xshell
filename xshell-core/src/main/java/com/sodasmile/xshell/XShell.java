@@ -19,12 +19,12 @@ import java.util.TreeSet;
 public class XShell {
 
     private static final String welcometext = // TODO anderssm: Skriv XShell i stedet.
-            "      ___    _____    ___  ___  ______  ___    ___\n"
-                    + "     /  /   /     \\  /  / /  / /  ___/ /  /   /  /\n"
-                    + "    /  /   |   /^-/ /  /_/  / /  /_   /  /   /  /\n"
-                    + "   /  / __  \\  \\   /  __   / /  __/  /  /   /  /\n"
-                    + "  /  /_ \\  \\'   | /  / /  / /  /__  /  /__ /  /__\n"
-                    + " /____/  \\_____/ /__/ /__/ /_____/ /_____//_____/";
+                      "__    ___    _____    ___  ___  ______  ___    ___\n"
+                    + "\\  \\ /  /   /     \\  /  / /  / /  ___/ /  /   /  /\n"
+                    + " \\  \"  /   |   /^-/ /  /_/  / /  /_   /  /   /  /\n"
+                    + "  \\   / __  \\  \\   /  __   / /  __/  /  /   /  /\n"
+                    + " /  ^ \\ \\  \\'   | /  / /  / /  /__  /  /__ /  /__\n"
+                    + "/__/ \\_\\ \\_____/ /__/ /__/ /_____/ /_____//_____/";
 
     //private RMIAdaptor connection;
     private MBeanServerConnection connection;
