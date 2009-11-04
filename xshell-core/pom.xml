@@ -16,9 +16,21 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.google.code.cli-parser</groupId>
+            <artifactId>cli</artifactId>
+            <version>7</version>
+        </dependency>
+        <dependency>
             <groupId>jline</groupId>
             <artifactId>jline</artifactId>
-            <version>0.9.94</version>
+            <version>0.9.95-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>5.9</version>
+            <classifier>jdk15</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

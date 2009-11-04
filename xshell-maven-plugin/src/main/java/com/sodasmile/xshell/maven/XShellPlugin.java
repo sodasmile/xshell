@@ -1,9 +1,10 @@
 package com.sodasmile.xshell.maven;
 
 import com.sodasmile.xshell.XShell;
+import com.sodasmile.xshell.console.Console;
 import com.sodasmile.xshell.provider.JmxConnectionProvider;
-import com.sodasmile.xshell.provider.JndiJmxConnectionProvider;
 import com.sodasmile.xshell.provider.PlatformMBeanServerProvider;
+import jline.Completor;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -11,7 +12,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -85,12 +85,40 @@ public class XShellPlugin extends AbstractMojo {
         getLog().debug("Using JMX provider '" + provider.getClass().getName() + "'.");
 
         try {
-            XShell shell = new XShell(connectionProvider);
-            shell.execute();
+
+            Thread thread = startShell(connectionProvider);
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                // ignore.
+            }
+
         } catch (Exception e) {
             throw new MojoExecutionException("Unable to launch XShell.", e);
         }
 
+    }
+
+    private Thread startShell(final JmxConnectionProvider connectionProvider) throws Exception {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+
+                Completor completor = new XShell.CommandCompletor();
+                Console console = new PluginConsole(System.in, System.out, completor, getLog());
+
+                try {
+                    XShell shell = null;//new XShell(connectionProvider, console);
+                    shell.run();
+                } catch (Exception e) {
+                    throw new RuntimeException("Unable to launch XShell instance.", e);
+                }
+
+            }
+        };
+        thread.start();
+        return thread;
     }
 
 }
