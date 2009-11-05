@@ -105,7 +105,7 @@ public class XShellPlugin extends AbstractMojo {
             @Override
             public void run() {
 
-                Completor completor = new XShell.CommandCompletor();
+                Completor completor = null;//new XShell.CommandCompletor();
                 Console console = new PluginConsole(System.in, System.out, completor, getLog());
 
                 try {
