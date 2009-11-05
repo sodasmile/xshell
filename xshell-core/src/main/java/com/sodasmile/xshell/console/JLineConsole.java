@@ -1,8 +1,13 @@
 package com.sodasmile.xshell.console;
 
-import jline.*;
+import jline.ANSIBuffer;
+import jline.Completor;
+import jline.ConsoleReader;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,18 +25,26 @@ public class JLineConsole implements Console {
 
             consoleReader.setBellEnabled(false);
 
-            String prompt = "xshell> ";
-            if (consoleReader.getTerminal().isANSISupported()) {
-                ANSIBuffer ansi = new ANSIBuffer();
-                prompt = ansi.yellow(prompt).toString();
-            }
-
-            consoleReader.setDefaultPrompt(prompt);
+            setPrompt("xshell");
             consoleReader.addCompletor(completor);
 
         } catch (IOException e) {
             throw new RuntimeException("Unable to create JLine console.", e);
         }
+    }
+
+    public void setPrompt(final String message) {
+        String prompt = message + "> ";
+        if (consoleReader.getTerminal().isANSISupported()) {
+            ANSIBuffer ansi = new ANSIBuffer();
+            prompt = ansi.yellow(prompt).toString();
+        }
+
+        consoleReader.setDefaultPrompt(prompt);
+    }
+
+    public ConsoleReader consoleReader() {
+        return consoleReader;
     }
 
     public String readLine() {
@@ -56,5 +69,5 @@ public class JLineConsole implements Console {
     public void writeError(String message) {
         Logger.getLogger(JLineConsole.class.getName()).severe(message);
     }
-    
+
 }
