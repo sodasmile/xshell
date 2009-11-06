@@ -15,6 +15,8 @@ public class InvokeOperationCommand extends KeywordCommand {
     @Override
     public void execute(final XShell xshell) {
 
+        // TODO runebjo: Piggybacking non-keyword commands here.
+
         if (arguments().length > 1) {
 
             String[] args = new String[arguments().length - 1];

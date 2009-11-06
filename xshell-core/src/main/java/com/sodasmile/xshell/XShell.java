@@ -35,6 +35,12 @@ public class XShell {
     @Option(name = "cp", description = "The classpath to use for the shell instance.", delimiter = ':')
     private String[] classpath = {};
 
+    @Option(name = "domain", description = "The default domain used by the shell.")
+    private String defaultDomain = null;
+
+    @Option(name = "mbean", description = "The default mbean used by the shell.")
+    private String defaultMBean = null;
+
     private Console console;
 
     private XShellCompletor completor;
@@ -61,6 +67,8 @@ public class XShell {
         initConnectionProvider(args);
         initCompletor();
         initConsole();
+
+        connect();
     }
 
     private void initConnectionProvider(final String[] args) {
@@ -135,19 +143,6 @@ public class XShell {
 
             Command command = toCommand(input);
             command.execute(this);
-
-            /*if (input.equals("avslutt")) {
-                break;
-            }
-            if (input.equals("help")) {
-                printHelp();
-            } else if (input.equals("pwd")) {
-                System.out.println("JALLA");//objectName );
-            } else if (input.equals("ls")) {
-                printinfo();
-            } else {
-                sendKommando(input);
-            }*/
         }
     }
 
@@ -177,7 +172,14 @@ public class XShell {
         try {
             this.connection = connectionProvider.connect();
             setDomains(connection.getDomains());
-            setState(State.CONNECTED);
+
+            if (defaultMBean != null && !defaultMBean.trim().equals("")) {
+                mbean(defaultMBean);
+            } else if (defaultDomain != null && !defaultDomain.trim().equals(" ")) {
+                domain(defaultDomain);               
+            } else {
+                setState(State.CONNECTED);
+            }
 
         } catch (IOException e) {
             throw new RuntimeException("Unable to connect to provider.", e);
@@ -216,8 +218,6 @@ public class XShell {
     }
 
     public void mbean(final String mbean) {
-        this.currentMBean = mbean;
-        console.setPrompt(mbean);
 
         final MBeanInfo info;
         try {
@@ -225,6 +225,9 @@ public class XShell {
         } catch (Exception e) {
             throw new RuntimeException("Cannot resolve MBean info for '" + mbean + "'.", e);
         }
+
+        this.currentMBean = mbean;
+        console.setPrompt(mbean);
 
         Map<String, MBeanOperationInfo> map = new HashMap<String, MBeanOperationInfo>();
 
