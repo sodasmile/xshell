@@ -14,7 +14,7 @@ public enum Keyword {
     connect(ConnectCommand.class),
     quit(QuitCommand.class),
     help(HelpCommand.class),
-    NULL(InvokeOperationCommand.class);
+    NULL(NonKeywordCommand.class);
 
     private final Class<? extends KeywordCommand> commandClass;
 

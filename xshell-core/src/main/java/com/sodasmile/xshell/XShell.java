@@ -109,6 +109,38 @@ public class XShell {
         this.completor = completor;
     }
 
+    public void nonKeywordInvoke(final String[] arguments) {
+
+        if (arguments.length == 0) {
+            throw new IllegalArgumentException("Cannot invoke <nothing>.");
+        }
+
+        if ("..".equals(arguments[0])) {
+
+            switch (state) {
+                case INSIDE_MBEAN:
+                    String domain = currentMBean.substring(0, currentMBean.indexOf(':'));
+                    domain(domain);
+                    break;
+                default:
+                    console.setPrompt("xshell");
+                    setState(State.CONNECTED);
+            }
+
+        } else {
+
+            if (arguments.length > 1) {
+
+                String[] args = new String[arguments.length - 1];
+                System.arraycopy(arguments, 1, args, 0, arguments.length - 1);
+
+                invokeOperation(arguments[0], args);
+            } else {
+                invokeOperation(arguments[0], new String[]{});
+            }
+        }
+    }
+
     public void invokeOperation(final String operation, final String[] arguments) {
 
         final ObjectName mbean = mbeans.get(currentMBean);
@@ -176,7 +208,7 @@ public class XShell {
             if (defaultMBean != null && !defaultMBean.trim().equals("")) {
                 mbean(defaultMBean);
             } else if (defaultDomain != null && !defaultDomain.trim().equals(" ")) {
-                domain(defaultDomain);               
+                domain(defaultDomain);
             } else {
                 setState(State.CONNECTED);
             }
@@ -189,6 +221,7 @@ public class XShell {
 
     public void domain(final String domain) {
 
+        this.currentMBean = null;
         console.setPrompt(domain);
 
         try {

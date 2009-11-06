@@ -13,8 +13,7 @@ public class ConnectedCompletor extends MultiCompletor implements XShellCompleto
     public ConnectedCompletor(final XShell xshell) {
         super(new Completor[]{
                 new SimpleEnumCompletor(Keyword.quit, Keyword.help),
-                new DomainCommandCompletor(xshell),
-                new MBeanCommandCompletor(xshell)
+                new DomainCommandCompletor(xshell)
         });
     }
 

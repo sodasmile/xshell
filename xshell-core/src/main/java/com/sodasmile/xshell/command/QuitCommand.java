@@ -14,7 +14,8 @@ public class QuitCommand extends KeywordCommand {
 
     @Override
     public void execute(XShell xshell) {
-        System.err.println("QUIT COMMAND");
+        System.err.println("Bye, bye!");
+        System.exit(0);
     }
 
 }
