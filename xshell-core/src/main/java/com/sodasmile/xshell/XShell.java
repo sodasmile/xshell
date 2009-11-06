@@ -21,8 +21,8 @@ import java.util.*;
  */
 public class XShell {
 
-    private static final String welcometext = // TODO anderssm: Skriv XShell i stedet.
-            "__    ___    _____    ___  ___  ______  ___    ___\n"
+    private static final String welcometext =
+            "\n\n__    ___    _____    ___  ___  ______  ___    ___\n"
                     + "\\  \\ /  /   /     \\  /  / /  / /  ___/ /  /   /  /\n"
                     + " \\  \"  /   |   /^-/ /  /_/  / /  /_   /  /   /  /\n"
                     + "  \\   / __  \\  \\   /  __   / /  __/  /  /   /  /\n"
@@ -193,7 +193,7 @@ public class XShell {
 
             Map<String, ObjectName> map = new HashMap<String, ObjectName>();
 
-            Set<ObjectName> objectNames = connection.queryNames(new ObjectName(domain + ":*"), null);
+            @SuppressWarnings({"unchecked"}) Set<ObjectName> objectNames = connection.queryNames(new ObjectName(domain + ":*"), null);
             for (ObjectName objectName : objectNames) {
                 map.put(objectName.getCanonicalName(), objectName);
             }
