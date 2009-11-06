@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sodasmile.xshell</groupId>
+    <artifactId>xshell</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>XShell</name>
+
+    <scm>
+        <connection>scm:hg:https://xshell.googlecode.com/hg</connection>
+        <developerConnection>scm:hg:https://xshell.googlecode.com/hg</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/xshell/issues/list</url>
+    </issueManagement>
+
+    <modules>
+        <module>xshell-core</module>
+        <module>xshell-maven-plugin</module>
+        <module>xshell-example-projects</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
