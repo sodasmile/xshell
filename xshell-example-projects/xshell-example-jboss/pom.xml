@@ -35,7 +35,15 @@
                 <groupId>${pom.groupId}</groupId>
                 <artifactId>xshell-maven-plugin</artifactId>
                 <version>${pom.version}</version>
-                <configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>xshell</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!--<configuration>
                     <provider>
                         <class>com.sodasmile.xshell.provider.JndiJmxConnectionProvider</class>
                         <name>jmx/invoker/RMIAdaptor</name>
@@ -43,7 +51,7 @@
                         <java.naming.factory.url.pkgs>org.jboss.naming:org.jnp.interfaces</java.naming.factory.url.pkgs>
                         <java.naming.provider.url>localhost:1099</java.naming.provider.url>
                     </provider>
-                </configuration>
+                </configuration>-->
             </plugin>
         </plugins>
     </build>
