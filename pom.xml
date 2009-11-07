@@ -23,7 +23,6 @@
 
     <modules>
         <module>xshell-core</module>
-        <module>xshell-maven-plugin</module>
         <module>xshell-example-projects</module>
     </modules>
 
